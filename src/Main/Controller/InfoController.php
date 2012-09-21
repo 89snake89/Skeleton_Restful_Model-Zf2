@@ -8,16 +8,17 @@ use Zend\Http\Request;
 use Main\Http\Restful;
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Decoder;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Input;
-use Zend\Validator;
+//use Zend\InputFilter\InputFilter;
+//use Zend\InputFilter\Input;
+//use Zend\Validator;
+use Main\Model\ValidatorRestAlbum;
 
 
 /**
  * Core of restful web service
  * 
  */
-class InfoController extends Restful
+class InfoController extends AbstractRestfulController
 {
     /**
      * Return list of resources
@@ -93,9 +94,9 @@ class InfoController extends Restful
      */
     
     public function create($data = null) {
-        $json = "{ \"artist\":\"sern\", \"title\":\"enruy7u\" }";
-        $array = \Zend\Json\Decoder::decode($json);
-        $artist = new Input('artist');
+        $data = "{ \"artist\":\"sern\", \"title\":\"enruy7u\" }";
+        $array = \Zend\Json\Decoder::decode($data);
+      /*  $artist = new Input('artist');
         $artist->getValidatorChain()->addValidator(new Validator\StringLength(array('min' => '5', 'max' => '20')));
         $title = new Input('title');
         $title->getValidatorChain()->addValidator(new Validator\StringLength(array('min' => '5', 'max' => '20')));
@@ -110,10 +111,12 @@ class InfoController extends Restful
             return $array;
         } else {
             echo "is not valid\n";
-            foreach ($inputFilter->getInvalidInput() as $error) {
+            foreach s($inputFilter->getInvalidInput() as $error) {
                 return (print_r ($error->getMessages()));
             }
-        }
+        } */
         //  var_dump($array);
+        var_dump($this->getServiceLocator('validatorRestAlbum'));
+        return var_dump($v);
     }
 }

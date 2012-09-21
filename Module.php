@@ -2,8 +2,11 @@
 
 namespace Main;
 
+use Main\Model\ValidatorRestAlbum;
+
 use Zend\Mvc\MvcEvent;
 use Album\Model\AlbumTable;
+use Main\Model\Validator;
 /**
  *
  */
@@ -14,13 +17,16 @@ class Module
      */
     public function onBootstrap($e)
     {
+        $validatorRestAlbum = $e->getApplication()->getServiceManager();
+        $validatorRestAlbum->setService('validatorRestAlbum', new ValidatorRestAlbum());
         /** @var \Zend\ModuleManager\ModuleManager $moduleManager */
         $moduleManager = $e->getApplication()->getServiceManager()->get('modulemanager');
+        
         /** @var \Zend\EventManager\SharedEventManager $sharedEvents */
         $sharedEvents = $moduleManager->getEventManager()->getSharedManager();
 
         $sharedEvents->attach('Zend\Mvc\Controller\AbstractRestfulController', MvcEvent::EVENT_DISPATCH, array($this, 'postProcess'), -100);
-        
+        $sharedEvents->attach('Main\Controller\InfoController', MvcEvent::EVENT_DISPATCH, array($e->getApplication()->getServiceManager()->get('Main\Http\Restful'), 'onDispatch'), 100);
         $sharedEvents->attach('Zend\Mvc\Application', MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'errorProcess'), 999);
     }
 
@@ -137,18 +143,5 @@ class Module
         $e->stopPropagation();
 
         return $postProcessor->getResponse();
-    }
-
-    public function getServiceConfig()
-    {
-        return array(
-                'factories' => array(
-                        'albumTable' =>  function($sm) {
-                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                        $table     = new AlbumTable($dbAdapter);
-                        return $table;
-        },
-        ),
-        );
     }
 }
