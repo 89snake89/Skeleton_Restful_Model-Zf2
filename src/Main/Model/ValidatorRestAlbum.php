@@ -16,12 +16,11 @@ class ValidatorRestAlbum
         $inputFilter = new InputFilter();
         $inputFilter->add($artist);
         $inputFilter->add($title);
-        $inputFilter->setData((array)$array);
+        $inputFilter->setData((array)$dato);
         if ($inputFilter->isValid()) {
-           // return $inputFilter->getValues();
-           var_dump('ciao');
+            return var_dump($dato);
         } else {
-            return var_dump('ciao');;
+            return null;
         }
     }
 }

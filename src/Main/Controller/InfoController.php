@@ -16,7 +16,7 @@ use Main\Model\ValidatorRestAlbum;
 
 /**
  * Core of restful web service
- * 
+ *
  */
 class InfoController extends AbstractRestfulController
 {
@@ -61,19 +61,12 @@ class InfoController extends AbstractRestfulController
         return 'fatto';
     }
     public function update($id, $data) {
-        
-        $json = "{ \"artist\":\"gianluca\", \"title\":\"cantocantocanto\" }";
+
+        $json = "{ \"artist\":\"dgegseg\", \"title\":\"dgdsrgsd\" }";
         $array = \Zend\Json\Decoder::decode($json);
-        $artist = new Input('artist');
-        $artist->getValidatorChain()->addValidator(new Validator\StringLength(array('min' => '5', 'max' => '20')));
-        $title = new Input('title');
-        $title->getValidatorChain()->addValidator(new Validator\StringLength(array('min' => '5', 'max' => '20')));
-        $inputFilter = new InputFilter();
-        $inputFilter->add($artist);
-        $inputFilter->add($title);
-        $inputFilter->setData((array)$array);
-        if ($inputFilter->isValid()) {
-            echo "is valid\n";
+        $v = $this->getServiceLocator()->get('validatorRestAlbum');
+        $v->validatorAlbum($array);
+        if ($array){
             $i = $this->getServiceLocator()->get('albumTable');
             $i->updateRestfulAlbum($array, $id);
             return $array;
@@ -83,40 +76,29 @@ class InfoController extends AbstractRestfulController
                 return (print_r ($error->getMessages()));
             }
         }
-        //  var_dump($array);
     }
-    
+
     /**
      * Create a record into db album
      *
      * @param  json string
      * @return mixed
      */
-    
+
     public function create($data = null) {
-        $data = "{ \"artist\":\"sern\", \"title\":\"enruy7u\" }";
+        $data = "{ \"artist\":\"serddfhdfdhn\", \"title\":\"enruy7u\" }";
         $array = \Zend\Json\Decoder::decode($data);
-      /*  $artist = new Input('artist');
-        $artist->getValidatorChain()->addValidator(new Validator\StringLength(array('min' => '5', 'max' => '20')));
-        $title = new Input('title');
-        $title->getValidatorChain()->addValidator(new Validator\StringLength(array('min' => '5', 'max' => '20')));
-        $inputFilter = new InputFilter();
-        $inputFilter->add($artist);
-        $inputFilter->add($title);
-        $inputFilter->setData((array)$array);
-        if ($inputFilter->isValid()) {
-            echo "is valid\n";
+        $v = $this->getServiceLocator()->get('validatorRestAlbum');
+        $v->validatorAlbum($array);
+        if ($array){
             $i = $this->getServiceLocator()->get('albumTable');
             $i->saveRestfulAlbum($array);
             return $array;
         } else {
-            echo "is not valid\n";
-            foreach s($inputFilter->getInvalidInput() as $error) {
+            echo "is not valid ciao\n";
+            foreach ($inputFilter->getInvalidInput() as $error) {
                 return (print_r ($error->getMessages()));
             }
-        } */
-        //  var_dump($array);
-        var_dump($this->getServiceLocator('validatorRestAlbum'));
-        return var_dump($v);
+        }
     }
 }

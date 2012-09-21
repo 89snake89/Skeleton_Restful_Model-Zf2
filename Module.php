@@ -17,11 +17,9 @@ class Module
      */
     public function onBootstrap($e)
     {
-        $validatorRestAlbum = $e->getApplication()->getServiceManager();
-        $validatorRestAlbum->setService('validatorRestAlbum', new ValidatorRestAlbum());
         /** @var \Zend\ModuleManager\ModuleManager $moduleManager */
         $moduleManager = $e->getApplication()->getServiceManager()->get('modulemanager');
-        
+
         /** @var \Zend\EventManager\SharedEventManager $sharedEvents */
         $sharedEvents = $moduleManager->getEventManager()->getSharedManager();
 
@@ -144,4 +142,16 @@ class Module
 
         return $postProcessor->getResponse();
     }
+
+    public function getServiceConfig()
+    {
+        return array(
+                'factories' => array(
+                        'validatorRestAlbum' =>  function() {
+                        $validatorRestAlbum = new ValidatorRestAlbum();
+                        return $validatorRestAlbum;
+        },
+        ),
+        );
+    } 
 }
